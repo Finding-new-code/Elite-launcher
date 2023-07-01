@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:elite_launcher/widgets/clock.dart';
 import 'package:elite_launcher/scr/api.dart';
+import 'package:elite_launcher/widgets/hi.dart';
 import 'package:elite_launcher/widgets/lannding.dart';
-import 'package:elite_launcher/widgets/notepad.dart';
 import 'package:flutter/material.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
 
+import 'scr/constants.dart/colors.dart';
 
 // final String imageurl;
 int? isviewed;
@@ -23,7 +23,11 @@ Future<void> main() async {
   // ignore: await_only_futures
   isviewed = await prefes.getInt('isviewed');
   await prefes.setInt('isviewed', 1);
-  runApp(const MyApp());
+  runApp(FutureProvider<FragmentPrograms?>(
+    create: (context) => loadFragmentPrograms(),
+    initialData: null,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +42,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/a': (context) => const Onboard(),
         '/b': (context) => const Wallpaper(),
-        '/c':(context) =>  Notepad(),
+       // '/c': (context) => Notepad(),
       },
     );
   }
@@ -59,11 +63,9 @@ class _HomePageState extends State<HomePage> {
       const BouncingScrollPhysics();
   final videoPlayerController =
       VideoPlayerController.asset('assets/images/waves.mp4');
-  String? _timeString;
- 
+
   // ChewieController? chewieController;
-  final hello = "assets/images/paper.jpg";
-  final hi = name;
+  // final hello = "assets/images/paper.jpg";
   final book = "assets/images/books.png";
   @override
   void initState() {
@@ -76,11 +78,7 @@ class _HomePageState extends State<HomePage> {
     //   aspectRatio: 10 / 20,
     //   allowMuting: true,
     // );
-    _timeString =
-       "${DateTime.now().hour} : ${DateTime.now().minute} ";
-
-     Timer.periodic(const Duration(seconds:1), (Timer t) => getCurrentDate());
-    name = name;
+  
     super.initState();
   }
 
@@ -88,7 +86,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     videoPlayerController.dispose();
     //chewieController!.dispose();
-   
+
     super.dispose();
   }
 
@@ -98,13 +96,11 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         color: Colors.blue.shade50,
         child: PageView(
-          
           children: [
-          
             Container(
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(hello), fit: BoxFit.cover)),
+                        image: AssetImage(hello.toString()), fit: BoxFit.cover)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -112,36 +108,23 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.only(top: 50, left: 50),
                       child: Row(
                         children: [
-                          Text(
-                            greetingMessage(),
-                            style: GoogleFonts.robotoFlex(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white70),
-                          ),
-                          Text(hi.toString())
+                          const Clock(),
+                          Text(username.toString())
                         ],
                       ),
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 50, top: 10, right: 20),
-                      child: Text(
-                        getCurrentDate(),
-                        style: GoogleFonts.robotoFlex(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 3,
-                          color: Colors.white70,
-                        ),
+                  
+                    SizedBox(
+                      height: 100,
+                      width: 150,
+                      child: IconButton(
+                        onPressed: (() {
+                          Navigator.pushNamed(context, '/c');
+                        }),
+                        icon: Image.asset("assets/images/books.png"),
+                        iconSize: 1,
                       ),
-                    ),
-                     SizedBox(height: 100,width:150,
-                       child: 
-                   IconButton(onPressed:(() {
-                       Navigator.pushNamed(context,'/c');
-                   }), icon:Image.asset("assets/images/books.png"),iconSize: 1,),
-                     )
+                    )
                   ],
                 )),
             // Chewie(
@@ -196,11 +179,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-   
-String getCurrentDate() {
-  DateTime now = DateTime.now();
-  String formattedDate = DateFormat('kk:mm\nEEE d MMM').format(now);
-  
-  return formattedDate;
-}
+
+ 
 }

@@ -1,10 +1,6 @@
-
-
-
-
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:async_wallpaper/async_wallpaper.dart';
+
+String? hello;
 
 class FullScreen extends StatefulWidget {
   final String imageurl;
@@ -16,16 +12,29 @@ class FullScreen extends StatefulWidget {
 }
 
 class _FullScreenState extends State<FullScreen> {
-  Future<void> setwallpaper() async {
-    int wallpaperLocation = AsyncWallpaper.HOME_SCREEN;
-Navigator.pushNamedAndRemoveUntil(context, "/",arguments:widget.imageurl, (route) => true);
-    var file = await DefaultCacheManager().getSingleFile(widget.imageurl);
+  late bool gotohome;
+  @override
+  void initState() {
+    super.initState();
+    gotohome = false;
+  }
 
-     await AsyncWallpaper.setWallpaperFromFile(
-        filePath: file.path,
-        wallpaperLocation: wallpaperLocation,
-        goToHome: true);
-    
+  Future<void> setwallpaper() async {
+    // var file = await DefaultCacheManager().getSingleFile(widget.imageurl);
+    // int location = AsyncWallpaper.HOME_SCREEN;
+    // try {
+    //   var result = await AsyncWallpaper.setWallpaperFromFile(
+    //     filePath: file.path,
+    //     wallpaperLocation: location,
+    //     goToHome: gotohome
+    //   );
+    // } on PlatformException {
+    //  String result = "failed to get wallpaper";
+    // }
+
+    setState(() {
+       hello = widget.imageurl;
+    });
   }
 
   @override

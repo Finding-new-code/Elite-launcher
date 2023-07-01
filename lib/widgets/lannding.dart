@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:confetti/confetti.dart';
 import 'package:elite_launcher/scr/constants.dart/colors.dart';
 
+String? username;
+
 class Onboard extends StatefulWidget {
   const Onboard({Key? key}) : super(key: key);
 
@@ -19,6 +21,7 @@ class _OnboardState extends State<Onboard> {
   final controller = PageController(initialPage: 0);
   final _controller = ConfettiController(duration: const Duration(seconds: 5));
   bool isPlaying = false;
+
   @override
   void dispose() {
     controller.dispose();
@@ -50,14 +53,15 @@ class _OnboardState extends State<Onboard> {
                   SizedBox(
                     width: 350,
                     child: TextFormField(
-                      // validator: (value) {
-                      //   if (value == null || value.isEmpty) {
-                      //     return 'are you an introvert? if not go ahead..';
-                      //   }
-                      //   return null;
-                      // },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'are you an introvert? if not go ahead..';
+                        }
+                        return null;
+                      },
                       onChanged: (value) {
                         name = value;
+                        name = username.toString();
                         setState(() {});
                       },
                       decoration: const InputDecoration(
@@ -74,10 +78,10 @@ class _OnboardState extends State<Onboard> {
                     key: _formkey,
                     label: const Text("Got it"),
                     onPressed: () {
-                     // if (_formkey.currentState!.validate()) {
-                        controller.nextPage(
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.bounceInOut);
+                      // if (_formkey.currentState!.validate()) {
+                      controller.nextPage(
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.bounceInOut);
                       // }
                       // return;
                     },
@@ -172,12 +176,9 @@ class _OnboardState extends State<Onboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: ((context) => HomePage(
-                                    name:name,
-                                  ))));
+                              builder: ((context) => HomePage())));
                     });
                   }),
-                
                   label: const Text("Let's get started"),
                 ),
                 Padding(

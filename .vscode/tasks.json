@@ -12,6 +12,21 @@
 			"problemMatcher": [],
 			"label": "flutter: flutter build appbundle",
 			"detail": ""
+		},
+		{
+			"type": "flutter",
+			"command": "flutter",
+			"args": [
+				"build",
+				"apk"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"label": "flutter: flutter build apk",
+			"detail": ""
 		}
 	]
 }
